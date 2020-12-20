@@ -17,21 +17,17 @@ jobs:
         version: "10.0"
         directory: ${{ runner.temp }}/llvm
 
-    - name: LLVM version
-      run: llvm-config --version
-
     - name: Install dependencies
       run: sudo apt-get install -y python3 python3-pip ruby ruby-dev rpm && sudo gem install --no-ri --no-rdoc fpm
     - name: Install python3 dependencies
       run: |
         export SETUPTOOLS_USE_DISTUTILS=stdlib
         python3 -m pip install --upgrade pip setuptools wheel
-    - name: Build alusus
+    - name: build alusus
       run:  |
-        mkdir Build && cd build
+        mkdir build && cd build
         cmake ../Sources/ -DCMAKE_BUILD_TYPE=Release -DLLVM_PATH=${{ runner.temp }}/llvm
         make -j $(nproc --all)
-
-    - name: Automated tests alusus
+    - name:  automated tests alusus
       run:  |
         cd build && make test
